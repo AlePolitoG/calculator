@@ -40,6 +40,7 @@ const delete_button = document.getElementById("delete");
 const number_1html = document.getElementById("pOperation");
 const result = document.getElementById("pResult");
 const alert = document.getElementById("alert");
+const point = document.querySelector("#point");
 //keys
 let arrOperators = Array.from(operators);
 let arrNumbers = Array.from(numbers);
@@ -58,27 +59,68 @@ arrNumbers.forEach((e) => {
 });
 
 //clear
-clear.addEventListener("click", () => {
+function clears() {
   number_1html.textContent = "0";
   result.textContent = "";
   cont = "";
   alert.textContent = "";
+  number_1 = "";
+  operator = "";
+}
+clear.addEventListener("click", () => {
+  clears();
 });
 
 //result
-equal.addEventListener("click", () => {
+function F_result() {
+  alert.textContent = "";
   result.textContent = operate();
   number_1html.textContent = "-";
   cont = operate();
+}
+equal.addEventListener("click", () => {
+  if (operator === "/" && result.textContent === "0") {
+    clears();
+    alert.textContent = "what do you want to do my friend? :)";
+  }
+  if (number_1 !== "" && cont !== "") {
+    F_result();
+  } else alert.textContent = "that is not possible my friend jeje";
 });
-//operator log
 
+//operator log
 arrOperators.forEach((e) => {
   e.addEventListener("click", () => {
+    if (operator !== "") {
+      if (operator === "/" && result.textContent === "0") {
+        clears();
+        alert.textContent = "what do you want to do my friend? :)";
+      } else F_result();
+      number_1 = "";
+    }
     operator = e.textContent;
     number_1html.textContent = `${cont}${operator}`;
     number_1 = cont;
     result.textContent = "";
     cont = "";
   });
+});
+
+//delete
+delete_button.addEventListener("click", () => {
+  let test = result.textContent.split("");
+  test.splice(-1, 1);
+  result.textContent = test.join("");
+  cont = test.join("");
+});
+
+// point
+point.addEventListener("click", () => {
+  if (!cont.includes(".")) {
+    let test = result.textContent.split("");
+    test.push("temp");
+    test.splice(-1, 1, ".");
+    result.textContent = test.join("");
+    cont = test.join("");
+  }
 });
